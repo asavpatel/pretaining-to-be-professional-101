@@ -7,7 +7,7 @@ A lot of people in my Company (Blue River Technology) have asked me how to start
 
 I`m pretty much a self taught python developer. Through my experience, I know there are something that no text book or courses think are worthing teaching but they are indeed super useful and almost all software engineer take for granted. Below is a breif list of something I want to start with.
 
-What!!! you don`t even know how to
+What!!! you don`t even know
 ---
 * Set up Python environment, create virtual environment and install library
 * 
