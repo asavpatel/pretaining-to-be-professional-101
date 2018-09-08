@@ -36,7 +36,7 @@ it will print out
 If you see things similiar to those, you are good for the next step.
 
 
-Don`t put stuff in your root environment
+Don`t put stuff in root environment
 ---
 After setting up python, you cannot resist to run the codebase or any project you find online. Then you realise it requires many packages. For example you receive this error:
 
@@ -50,7 +50,7 @@ This error means, you need to install a package called `pytorch`. However, **do 
 
 To create a **virtual environment** is what a professional developer will do.
 
-## 1. Plain Python ([virtualenv](https://virtualenv.pypa.io/en/stable/userguide/))
+### 1. Plain Python ([virtualenv](https://virtualenv.pypa.io/en/stable/userguide/))
 If you use plain Python, below are the instructions for you!
 
 * First install virtualenv
@@ -75,5 +75,69 @@ Then you will see something like this:
 
 Now, you are in your `test_env` environment. When you run `python` in this mode, you are not using your root python. The benfit will show up when you are working with different project and each of them has unique environment. Also if you f**k up your environment, you can just delete it and create it again. Image what will happen if your root environment broke, that is the real pain.
 
-## 2. Anaconda
-Anaconda has create tools to create conda environment, which works like `virtualenv`
+### 2. Anaconda
+Anaconda has create tools to create conda environment, which works like `virtualenv`. This [link](https://conda.io/docs/user-guide/tasks/manage-environments.html) has detail instruction.
+
+* Create a `python3` conda env called `test_env`
+```
+conda create -n test_env python=3.6
+```
+
+use this conda environment `test_env`
+```
+source activate test_env
+```
+or
+```
+activate test_env
+```
+
+Now you have known how to create an environment using virtualenv or conda
+
+Put library to your virtual environment
+---
+The most popular choice is `pip`
+
+linux user:
+```
+sudo apt-get install python-pip
+```
+
+MacOS user:
+```
+sudo easy_install pip
+```
+
+Windows user:
+
+Download [get-pip.py](https://bootstrap.pypa.io/get-pip.py) to a folder on your computer. Open a command prompt window and navigate to the folder containing get-pip.py. Then run 
+```
+python get-pip.py
+```
+
+Once you have `pip` ready, you can install any package by
+```
+pip install [package]
+```
+
+If you have anaconda, you can use conda to install package
+```
+conda install [package]
+```
+
+However!
+---
+For a well maintained project, other developer has prepared something to make your life easier. It is generally called environment file. If the team is using `virtualenv`, the file usually named as `requirements.txt`. [Here](https://github.com/BlueRiverTechnology/ts-datacart) is an example. You can create the environment by:
+
+```
+virtualenv -p python3 brtenv
+pip install -r requirements.txt
+```
+
+On the other hand, some team use `conda` to manage environment, the file usually named as `environment.yml`. [Here](https://github.com/BlueRiverTechnology/ts-standcount-model) is an example. You can create the environment by:
+
+```
+conda env create -f environment.yml
+```
+
+Great! you have finished your first step!
