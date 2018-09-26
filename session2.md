@@ -247,5 +247,5 @@ Merge made by the 'recursive' strategy.
 you can always use **git log** to check if you received all the changes back from Github.
 you will also need to frequently change branches while working. use **git checkout _branchname_**  to switch to a different branch.
 
-### Time to swim with the sharks.
+### Time to swim with the sharks or may be the octopus.!
 I hope this would be at least _git_  you started on your journey to use Git efficiently. ;-)
