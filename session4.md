@@ -406,13 +406,5 @@ The  mkdir  command is used to create directories. To use it, you simply type:
 ```
 [me@linuxbox me]$  mkdir  _directory..._
 ```
-## Using Commands With Wildcards
 
-Since the commands we have covered here accept multiple file and directories names as arguments, you can use wildcards to specify them. Here are a few examples:
 
-Command examples using wildcards
-|  **Command** | **Results** |
-| -- | -- |
-| cp  *.txt text_files | Copy all files in the current working directory with names ending with the characters ".txt" to an existing directory named  _text_files_. |
-| mv my_dir ../*.bak my_new_dir | Move the subdirectory  _my_dir_  and all the files ending in ".bak" in the current working directory's parent directory to an existing directory named  _my_new_dir_. |
-| rm *~ | Delete all files in the current working directory that end with the character "~". Some applications create backup files using this naming scheme. Using this command will clean them out of a directory. |
