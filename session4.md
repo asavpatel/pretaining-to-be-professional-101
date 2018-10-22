@@ -407,4 +407,211 @@ The  mkdir  command is used to create directories. To use it, you simply type:
 [me@linuxbox me]$  mkdir  _directory..._
 ```
 
+# Working With Commands
 
+Up until now you have seen a number of commands and their mysterious options and arguments. In this lesson, we will try to remove some of that mystery. This lesson will introduce the following commands.
+
+-   [type](http://linuxcommand.org/lc3_man_pages/typeh.html)  - Display information about command type
+-   [which](http://linuxcommand.org/lc3_man_pages/which1.html)  - Locate a command
+-   [help](http://linuxcommand.org/lc3_man_pages/helph.html)  - Display reference page for shell builtin
+-   [man](http://linuxcommand.org/lc3_man_pages/man1.html)  - Display an on-line command reference
+
+## What Are "Commands?"
+
+Commands can be one of 4 different kinds:
+
+1.  **An executable program**  like all those files we saw in /usr/bin. Within this category, programs can be  _compiled binaries_  such as programs written in C and C++, or programs written in  _scripting languages_  such as the shell, Perl, Python, Ruby, etc.
+2.  **A command built into the shell itself.**  bash provides a number of commands internally called  _shell builtins_. The  cd  command, for example, is a shell builtin.
+3.  **A shell function.**  These are miniature shell scripts incorporated into the  _environment_. We will cover configuring the environment and writing shell functions in later lessons, but for now, just be aware that they exist.
+4.  **An alias.**  Commands that you can define yourselves, built from other commands. This will be covered in a later lesson.
+
+## Identifying Commands
+
+It is often useful to know exactly which of the four kinds of commands is being used and Linux provides a couple of ways to find out.
+
+### type
+
+The  type  command is a shell builtin that displays the kind of command the shell will execute, given a particular command name. It works like this:
+
+	type _command_
+
+where “command” is the name of the command you want to examine. Here are some examples:
+```
+[me@linuxbox me]$  type type  
+type is a shell builtin
+
+[me@linuxbox me]$  type ls  
+ls is aliased to `ls --color=tty'
+
+[me@linuxbox me]$  type cp  
+cp is /bin/cp
+```
+Here we see the results for three different commands. Notice that the one for ls (taken from a Fedora system) and how the ls command is actually an alias for the ls command with the “-- color=tty” option added. Now we know why the output from ls is displayed in color!
+
+### which
+
+Sometimes there is more than one version of an executable program installed on a system. While this is not very common on desktop systems, it's not unusual on large servers. To determine the exact location of a given executable, the  which  command is used:
+```
+[me@linuxbox me]$  which ls  
+/bin/ls
+```
+which  only works for executable programs, not builtins nor aliases that are substitutes for actual executable programs.
+
+## Getting Command Documentation
+
+With this knowledge of what a command is, we can now search for the documentation available for each kind of command.
+
+### help
+
+bash  has a built-in help facility available for each of the shell builtins. To use it, type “help” followed by the name of the shell builtin. Optionally, you may add the -m option to change the format of the output. For example:
+```
+[me@linuxbox me]$  help -m cd  
+
+NAME
+    cd - Change the shell working directory.
+
+SYNOPSIS
+    cd [-L|-P] [dir]
+
+DESCRIPTION
+    Change the shell working directory.
+    
+    Change the current directory to DIR.  The default DIR is the value of the
+    HOME shell variable.
+    
+    The variable CDPATH defines the search path for the directory containing
+    DIR.  Alternative directory names in CDPATH are separated by a colon (:).
+    A null directory name is the same as the current directory.  If DIR begins
+    with a slash (/), then CDPATH is not used.
+    
+    If the directory is not found, and the shell option `cdable_vars' is set,
+    the word is assumed to be  a variable name.  If that variable has a value,
+    its value is used for DIR.
+    
+    Options:
+        -L	force symbolic links to be followed
+        -P	use the physical directory structure without following symbolic
+    	links
+    
+    The default is to follow symbolic links, as if `-L' were specified.
+    
+    Exit Status:
+    Returns 0 if the directory is changed; non-zero otherwise.
+
+SEE ALSO
+    bash(1)
+
+IMPLEMENTATION
+    GNU bash, version 4.1.5(1)-release (i486-pc-linux-gnu)
+    Copyright (C) 2009 Free Software Foundation, Inc.
+```
+
+**A note on notation:**  When square brackets appear in the description of a command's syntax, they indicate optional items. A vertical bar character indicates mutually exclusive items. In the case of the  cd  command above:
+
+	cd [-L|-P] [dir]
+
+This notation says that the command  cd  may be followed optionally by either a “-L” or a “-P” and further, optionally followed by the argument “dir”.
+
+### --help
+
+Many executable programs support a “--help” option that displays a description of the command's supported syntax and options. For example:
+```
+[me@linuxbox me]$  mkdir --help  
+
+Usage: mkdir [OPTION] DIRECTORY...
+Create the DIRECTORY(ies), if they do not already exist.
+
+   -Z, --context=CONTEXT (SELinux) set security context to CONTEXT
+Mandatory arguments to long options are mandatory for short options
+too.
+   -m, --mode=MODE   set file mode (as in chmod), not a=rwx – umask
+   -p, --parents     no error if existing, make parent directories as
+                     needed
+   -v, --verbose     print a message for each created directory
+   --help            display this help and exit
+   --version         output version information and exit
+```
+Some programs don't support the “--help” option, but try it anyway. Often it results in an error message that will reveal similar usage information.
+
+### man
+
+Most executable programs intended for command line use provide a formal piece of documentation called a  _manual_  or  _man page_. A special paging program called  man  is used to view them. It is used like this:
+
+	man _program_
+
+where “program” is the name of the command to view. Man pages vary somewhat in format but generally contain a title, a synopsis of the command's syntax, a description of the command's purpose, and a listing and description of each of the command's options. Man pages, however, do not usually include examples, and are intended as a reference, not a tutorial. As an example, let's try viewing the man pagefor the  ls  command:
+```
+[me@linuxbox me]$  man ls  
+```
+On most Linux systems,  man  uses  less  to display the manual page, so all of the familiar  less  commands work while displaying the page.
+
+# I/O Redirection
+
+In this lesson, we will explore a powerful feature used by many command line programs called  _input/output redirection_. As we have seen, many commands such as  ls  print their output on the display. This does not have to be the case, however. By using some special notations we can  _redirect_  the output of many commands to files, devices, and even to the input of other commands.
+
+## Standard Output
+
+Most command line programs that display their results do so by sending their results to a facility called  _standard output_. By default, standard output directs its contents to the display. To redirect standard output to a file, the ">" character is used like this:
+```
+[me@linuxbox me]$  ls > file_list.txt
+```
+In this example, the  ls  command is executed and the results are written in a file named file_list.txt. Since the output of  ls  was redirected to the file, no results appear on the display.
+
+Each time the command above is repeated, file_list.txt is overwritten from the beginning with the output of the command  ls. If you want the new results to be  _appended_  to the file instead, use ">>" like this:
+```
+[me@linuxbox me]$  ls >> file_list.txt
+```
+When the results are appended, the new results are added to the end of the file, thus making the file longer each time the command is repeated. If the file does not exist when you attempt to append the redirected output, the file will be created.
+
+## Standard Input
+
+Many commands can accept input from a facility called  _standard input_. By default, standard input gets its contents from the keyboard, but like standard output, it can be redirected. To redirect standard input from a file instead of the keyboard, the "<" character is used like this:
+```
+[me@linuxbox me]$  sort < file_list.txt
+```
+In the example above, we used the  [sort](http://linuxcommand.org/lc3_man_pages/sort1.html)  command to process the contents of file_list.txt. The results are output on the display since the standard output was not redirected. We could redirect standard output to another file like this:
+```
+[me@linuxbox me]$  sort < file_list.txt > sorted_file_list.txt
+```
+As you can see, a command can have both its input and output redirected. Be aware that the order of the redirection does not matter. The only requirement is that the redirection operators (the "<" and ">") must appear after the other options and arguments in the command.
+
+## Pipelines
+
+The most useful and powerful thing you can do with I/O redirection is to connect multiple commands together with what are called  _pipelines_. With pipelines, the standard output of one command is fed into the standard input of another. Here is my absolute favorite:
+```
+[me@linuxbox me]$  ls -l | less
+```
+In this example, the output of the  ls  command is fed into  less. By using this  "| less"  trick, you can make any command have scrolling output. I use this technique all the time.
+
+By connecting commands together, you can acomplish amazing feats. Here are some examples you'll want to try:  
+  
+
+Examples of commands used together with pipelines:
+
+
+|  **Command** |  **What it does** | 
+| -- | -- |
+| ls -lt \|  head | Displays the 10 newest files in the current directory. |
+| du \| sort -nr | Displays a list of directories and how much space they consume, sorted from the largest to the smallest. |
+| find -type f -print \|  wc -l | Displays the total number of files in the current working directory and all of its subdirectories. |
+
+## Filters
+
+One kind of program frequently used in pipelines is called  _filters_. Filters take standard input and perform an operation upon it and send the results to standard output. In this way, they can be combined to process information in powerful ways. Here are some of the common programs that can act as filters:  
+  
+
+Common filter commands
+
+
+|  **Program**  |  **What it does** |
+| -- | -- |
+| sort | Sorts standard input then outputs the sorted result on standard output. |
+| uniq | Given a sorted stream of data from standard input, it removes duplicate lines of data (i.e., it makes sure that every line is unique). |
+| grep | Examines each line of data it receives from standard input and outputs every line that contains a specified pattern of characters. |
+| fmt | Reads text from standard input, then outputs formatted text on standard output. |
+| pr | Takes text input from standard input and splits the data into pages with page breaks, headers and footers in preparation for printing. |
+| head | Outputs the first few lines of its input. Useful for getting the header of a file. |
+| tail | Outputs the last few lines of its input. Useful for things like getting the most recent entries from a log file. |
+| tr | Translates characters. Can be used to perform tasks such as upper/lowercase conversions or changing line termination characters from one type to another (for example, converting DOS text files into Unix style text files). |
+| sed | Stream editor. Can perform more sophisticated text translations than  tr. |
+| awk | An entire programming language designed for constructing filters. Extremely powerful. |
